@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<title>日本史うさぎクイズ</title>
+<style>
+:root{--navy:#17395d;--red:#d33a34;--cream:#fff9ef;--line:#ead7c2;--ink:#1d2733;--green:#198754;--brown:#745943}
+*{box-sizing:border-box} body{margin:0;font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Yu Gothic',sans-serif;background:linear-gradient(180deg,#fffaf0,#f4eadc);color:var(--ink);}
+.app{max-width:1180px;margin:0 auto;padding:14px}.top{display:flex;align-items:center;justify-content:space-between;background:#fff;border:2px solid #efe2d4;border-radius:22px;padding:12px 18px;box-shadow:0 6px 16px #0001}.brand{display:flex;gap:12px;align-items:center}.brand img{width:54px;height:54px;object-fit:contain}.brand h1{font-size:30px;margin:0;color:var(--navy)}.brand p{margin:2px 0 0;font-size:13px;color:#777}.stats{display:flex;gap:10px}.pill{background:#fff;border:2px solid var(--line);border-radius:999px;padding:9px 14px;font-weight:800;color:var(--navy)}
+.grid{display:grid;grid-template-columns:1.35fr .9fr;gap:18px;margin-top:14px}.card{background:#fffdf8;border:2px solid #efe2d4;border-radius:24px;box-shadow:0 10px 22px #00000012;padding:20px}.hero h2{font-size:44px;line-height:1.1;margin:10px 0;color:#8b1d18}.hero p{font-size:16px;line-height:1.8;color:#555}.btnrow{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:18px}.btn,.choice{border:none;border-radius:18px;padding:16px 18px;font-weight:900;font-size:18px;box-shadow:0 6px 0 #0002;cursor:pointer}.btn{background:linear-gradient(90deg,#d92828,#e95349);color:#fff}.subbtn{background:#fff;color:var(--navy);border:2px solid var(--line);width:100%;margin-top:12px}.trainbtn{background:linear-gradient(90deg,#184a7a,#27649d);color:#fff;width:100%;margin-top:12px;text-decoration:none;display:block;text-align:center}.rabbitBox{position:relative;min-height:360px;overflow:hidden;text-align:center}.bubble{display:inline-block;background:#fff;border:4px solid #333;border-radius:20px;padding:14px 18px;font-weight:900;font-size:20px;position:relative;box-shadow:4px 5px 0 #0002}.bubble:after{content:"";position:absolute;bottom:-22px;left:42px;border-width:22px 10px 0 10px;border-style:solid;border-color:#333 transparent transparent transparent}.rabbitBox img{max-width:260px;max-height:230px;object-fit:contain;margin-top:28px}.grass{position:absolute;left:-8%;right:-8%;bottom:-45px;height:110px;background:#bfe7a8;border-radius:50% 50% 0 0;z-index:0}.rabbitBox>*:not(.grass){position:relative;z-index:1}
+.quiz{display:none}.bar{display:flex;align-items:center;gap:12px;margin-bottom:12px}.progress{height:16px;flex:1;background:#eadccc;border-radius:999px;overflow:hidden}.fill{height:100%;width:0;background:linear-gradient(90deg,#ff7b00,#d62f2f);transition:.25s}.qbox{border:2px solid var(--line);border-radius:20px;padding:18px;background:#fff}.tag{display:inline-block;background:#f0dfd0;color:#7a4c34;font-weight:900;border-radius:999px;padding:8px 12px;font-size:13px;margin-bottom:12px}.qtext{font-size:25px;line-height:1.45;font-weight:900;margin-bottom:16px}.choices{display:grid;gap:10px}.choice{background:#fffaf4;border:2px solid #dcc7b2;text-align:left;color:#174a80}.choice.correct{background:#e8f7ee;border-color:#198754;color:#146c43}.choice.wrong{background:#fdeaea;border-color:#d33a34;color:#9d201a}.result{display:none;margin-top:14px;border:2px dashed #efc18e;border-radius:18px;padding:14px;background:#fffaf2}.resultFlex{display:flex;gap:14px;align-items:center}.result img{width:86px;height:86px;object-fit:contain;border:2px solid #ead7c2;border-radius:18px;background:#fff}.result h3{margin:0 0 6px;color:var(--green)}.hook{margin-top:12px;border:2px solid #f0d0a8;border-radius:16px;padding:12px;background:#fff}.nexts{display:flex;gap:10px;margin-top:12px}.smallbtn{padding:12px 18px;border:none;border-radius:14px;background:var(--navy);color:white;font-weight:900;font-size:16px}.menubtn{background:#745943}.finish{text-align:center;display:none}.finish h2{font-size:38px;color:#8b1d18}.finish img{width:180px;max-width:60%}@media(max-width:850px){.grid{grid-template-columns:1fr}.brand h1{font-size:24px}.hero h2{font-size:34px}.qtext{font-size:22px}.rabbitBox{min-height:300px}.btnrow{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="app">
+<header class="top"><div class="brand"><img src="images/rabbit01.png" alt="うさぎ"><div><h1>日本史うさぎクイズ</h1><p>通常クイズモード｜幕末の流れを4択でテンポよく暗記</p></div></div><div class="stats"><div class="pill" id="totalPill">全問</div><div class="pill" id="scorePill">0点</div><div class="pill" id="streakPill">連続0</div></div></header>
+<section id="menu" class="grid">
+<div class="card hero"><h2>幕末を、うさぎと一気に覚える。</h2><p>まずは4択で「点」を覚えるモード。正解後に、記憶フック・プチ解説・うさぎのリアクションが出ます。流れをじっくりつかむときは、下のボタンからトレーニングモードへ。</p><div class="btnrow"><button class="btn" onclick="startQuiz(10)">10問</button><button class="btn" onclick="startQuiz(20)">20問</button><button class="btn" onclick="startQuiz(999)">全問</button></div><button class="btn subbtn" onclick="startMissOnly()">前回ミスだけ復習</button><a class="btn trainbtn" href="index2.html">トレーニングモードへ</a></div>
+<div class="card rabbitBox"><div class="bubble">「点」をまず覚える！<br>次にトレーニングモードで「線」にする！</div><br><img src="images/rabbit14.png" alt="うさぎ"><div class="grass"></div></div>
+</section>
+<section id="quiz" class="card quiz"><div class="bar"><div class="pill" id="modeLabel">クイズ</div><div class="pill" id="countLabel">1/10</div><div class="progress"><div class="fill" id="fill"></div></div><div class="pill" id="scoreNow">正解0</div></div><div class="qbox"><div class="tag" id="phase"></div><div class="qtext" id="question"></div><div class="choices" id="choices"></div></div><div class="result" id="result"><div class="resultFlex"><img id="resultRabbit" src="images/rabbit01.png" alt="うさぎ"><div><h3 id="resultTitle"></h3><p id="resultMsg"></p></div></div><div class="hook"><b>記憶フック</b><div id="memory"></div><b>プチ解説</b><div id="mini"></div></div><div class="nexts"><button class="smallbtn" onclick="nextQuestion()">次へ</button><button class="smallbtn menubtn" onclick="backMenu()">メニュー</button></div></div></section>
+<section id="finish" class="card finish"><h2>終了！</h2><img src="images/rabbit07.png" alt="うさぎ"><p id="finishText"></p><button class="btn" onclick="backMenu()">メニューへ</button><a class="btn trainbtn" href="index2.html">トレーニングモードへ</a></section>
+</div>
+<script>
+const IMG={ok:'images/rabbit07.png',great:'images/rabbit13.png',bad:'images/rabbit09.png',think:'images/rabbit05.png'};
+const QUESTIONS=[
+{phase:'公武合体と尊攘運動',q:'1853（嘉永6）年のペリー来航直後に13代将軍になったのはだれか。',a:'徳川家定',c:['徳川家慶','徳川家茂','徳川慶喜'],m:'家慶の次が家定。黒船ショックの直後に将軍交代。',e:'徳川家定は病弱で、次の将軍をめぐる争いが将軍継嗣問題として表面化した。'},
+{phase:'公武合体と尊攘運動',q:'徳川家定が病弱で嗣子もなかったため、1857年から公然化した次期将軍の問題を何というか。',a:'将軍継嗣問題',c:['公武合体論','安政の大獄','文久の改革'],m:'将軍の「継ぎ」を「嗣ぐ」問題＝将軍継嗣問題。',e:'一橋派と南紀派の対立が強まり、幕府内部の政治対立につながった。'},
+{phase:'公武合体と尊攘運動',q:'14代将軍に賢明な人物を迎え、幕政改革を行って難局を乗り切ろうと考えた人たちが推したのはだれか。',a:'徳川（一橋）慶喜',c:['徳川家茂','松平慶永','井伊直弼'],m:'一橋派は「一橋慶喜」を推した。名前に一橋が出たらこの流れ。',e:'一橋派は改革派大名や志士に支持されたが、井伊直弼の登場で退けられた。'},
+{phase:'公武合体と尊攘運動',q:'14代将軍に徳川慶喜を推した人たちは何派と呼ばれたか。',a:'一橋派',c:['南紀派','尊王攘夷派','佐幕派'],m:'慶喜＝一橋家。だから一橋派。',e:'対立した南紀派は紀伊藩主の徳川慶福を推した。'},
+{phase:'将軍継嗣問題',q:'譜代大名らは血筋を重んじて14代将軍に幼少の紀伊藩主を推した。この紀伊藩主はだれか。',a:'徳川慶福',c:['徳川慶喜','徳川斉昭','松平慶永'],m:'紀伊から来た慶福。のちの徳川家茂。',e:'徳川慶福はのちに14代将軍徳川家茂となる。'},
+{phase:'将軍継嗣問題',q:'14代将軍に徳川慶福を推した譜代大名らは何派と呼ばれたか。',a:'南紀派',c:['一橋派','尊王派','倒幕派'],m:'紀伊藩＝南紀。だから南紀派。',e:'血筋や幕府秩序を重視した譜代大名が中心だった。'},
+{phase:'一橋派の人物',q:'薩摩藩主で、一橋派の中心人物の1人はだれか。',a:'島津斉彬',c:['島津久光','西郷隆盛','大久保利通'],m:'薩摩の名君・島津斉彬は一橋派。',e:'島津斉彬は開明的な大名として、幕政改革にも関心をもった。'},
+{phase:'一橋派の人物',q:'越前藩主で、一橋派の中心人物の1人はだれか。',a:'松平慶永（春嶽）',c:['橋本左内','井伊直弼','徳川斉昭'],m:'越前＝松平春嶽。春の越前、と覚える。',e:'松平慶永は一橋派の有力大名で、橋本左内を登用した。'},
+{phase:'南紀派と大老',q:'南紀派と呼ばれた譜代大名らの中心となっていたのはだれか。また、その人物はどこの藩主であったか。',a:'井伊直弼・彦根藩',c:['徳川斉昭・水戸藩','松平慶永・越前藩','島津斉彬・薩摩藩'],m:'井伊直弼＝彦根藩。赤備えの彦根、とセットで覚える。',e:'井伊直弼は譜代大名の代表として南紀派を支えた。'},
+{phase:'安政の大獄',q:'1858（安政5）年に井伊直弼は大老に就任し、将軍継嗣をだれと定めたか。',a:'徳川慶福（家茂）',c:['徳川慶喜','徳川家定','徳川斉昭'],m:'井伊直弼が押し切ったのは慶福＝家茂。',e:'井伊直弼は南紀派の立場から徳川慶福を14代将軍に定めた。'},
+{phase:'安政の大獄',q:'井伊直弼が批判勢力に対して徹底的に弾圧を加え、処罰したことを何と呼ぶか。',a:'安政の大獄',c:['桜田門外の変','坂下門外の変','文久の改革'],m:'安政年間の大きな弾圧＝安政の大獄。',e:'尊王攘夷派や一橋派の関係者が処罰され、反発を強めた。'},
+{phase:'安政の大獄',q:'安政の大獄で蟄居を命じられた前水戸藩主はだれか。',a:'徳川斉昭',c:['徳川慶喜','松平慶永','島津斉彬'],m:'水戸の斉昭、井伊直弼ににらまれる。',e:'徳川斉昭は強い攘夷論をもち、井伊直弼と対立した。'},
+{phase:'安政の大獄',q:'安政の大獄で処刑された越前藩士で、緒方洪庵の適々斎塾に学び、松平慶永を助けた人物はだれか。',a:'橋本左内',c:['吉田松陰','島津久光','大原重徳'],m:'越前のブレーン＝橋本左内。',e:'橋本左内は若くして処刑され、安政の大獄の象徴的人物の一人となった。'},
+{phase:'桜田門外の変',q:'安政の大獄に反発した志士たちが、大老井伊直弼を登城途中に暗殺した事件を何というか。',a:'桜田門外の変',c:['坂下門外の変','生麦事件','寺田屋事件'],m:'1860、雪の桜田門で井伊直弼暗殺。',e:'幕府最高職の大老が江戸城近くで殺害され、幕府の権威は大きく揺らいだ。'},
+{phase:'桜田門外の変',q:'桜田門外の変は西暦何年におこったか。',a:'1860年',c:['1858年','1862年','1863年'],m:'人群れ（1860）の中で桜田門外。',e:'日米修好通商条約・安政の大獄の反発が1860年に爆発した。'},
+{phase:'桜田門外の変',q:'桜田門外の変をおこしたのは、主に何藩の脱藩志士たちであったか。',a:'水戸藩',c:['薩摩藩','長州藩','土佐藩'],m:'井伊直弼と対立した徳川斉昭は水戸。だから水戸浪士。',e:'水戸浪士らが井伊直弼を襲撃した。'},
+{phase:'尊王攘夷と公武合体',q:'天皇を尊ぶべきという主張と、外国人排斥思想が結合した反幕政治運動の潮流を何というか。',a:'尊王攘夷論',c:['公武合体論','開国論','佐幕論'],m:'尊王＝天皇を尊ぶ、攘夷＝外国を追い払う。',e:'ペリー来航以降、開国への反発と朝廷重視が結びつき、政治運動化した。'},
+{phase:'公武合体',q:'井伊直弼の独裁政治が否定されたことから、幕府では朝廷の伝統的権威と結びついて幕政を維持しようとする考えが起こった。この考え方を何というか。',a:'公武合体論',c:['尊王攘夷論','倒幕論','富国強兵'],m:'公＝朝廷、武＝幕府。合体して安定したい。',e:'幕府は朝廷との連携によって、政治的な正統性を回復しようとした。'},
+{phase:'公武合体',q:'公武合体論を推進した老中はだれか。',a:'安藤信正',c:['井伊直弼','松平慶永','徳川斉昭'],m:'公武合体を進めた老中＝安藤信正。',e:'安藤信正は和宮降嫁を進めたが、尊攘派の反発も招いた。'},
+{phase:'和宮降嫁',q:'安藤信正が公武合体の政策を進めるために、朝廷に申し入れたことは何か。',a:'和宮の将軍家茂への降嫁',c:['勅許なしの条約調印','攘夷の実行','参勤交代の緩和'],m:'公武合体の象徴＝和宮降嫁。',e:'皇女和宮を将軍家茂に嫁がせることで、朝廷と幕府の結びつきを強めようとした。'},
+{phase:'和宮降嫁',q:'和宮の将軍家茂への降嫁の申し入れを受け入れた天皇はだれか。',a:'孝明天皇',c:['明治天皇','光格天皇','大正天皇'],m:'幕末の朝廷といえば孝明天皇。',e:'孝明天皇は攘夷の考えが強かったが、公武合体政策にも関わった。'},
+{phase:'坂下門外の変',q:'和宮降嫁に憤激した尊攘派の志士たちにより、老中安藤信正が傷つけられた事件を何というか。',a:'坂下門外の変',c:['桜田門外の変','寺田屋事件','生麦事件'],m:'桜田門外の次は坂下門外。門外事件が続く。',e:'安藤信正はこの事件で失脚し、公武合体政策も揺らいだ。'},
+{phase:'坂下門外の変',q:'坂下門外の変は西暦何年におこったか。',a:'1862年',c:['1860年','1858年','1863年'],m:'1862年、坂下門外。桜田門外から2年後。',e:'1862年には尊攘運動がさらに激しくなっていった。'},
+{phase:'薩摩と尊攘',q:'独自の公武合体論をもって幕政改革にのり出し、国父と称された薩摩藩の実力者はだれか。',a:'島津久光',c:['島津斉彬','西郷隆盛','大久保利通'],m:'斉彬の後、薩摩を動かす久光。',e:'島津久光は藩主の父として国父と呼ばれ、中央政治に関与した。'},
+{phase:'寺田屋事件',q:'島津久光が幕兵を率いて上京した折、倒幕挙兵を計画していた薩摩藩士の有馬新七らを斬り殺す事件をおこした。この事件を何というか。',a:'寺田屋事件',c:['生麦事件','薩英戦争','坂下門外の変'],m:'薩摩内部の暴発を寺田屋で止めた。',e:'寺田屋事件は薩摩藩内部の急進派を抑える事件だった。'},
+{phase:'文久の改革',q:'島津久光は勅使大原重徳とともに江戸に下り、幕政改革を要求した。この時に幕府が行った改革を何というか。',a:'文久の改革',c:['安政の改革','享保の改革','天保の改革'],m:'文久年間の幕政改革＝文久の改革。',e:'幕府は人事や制度を改め、体制の立て直しを図った。'},
+{phase:'文久の改革',q:'文久の改革で新設された、将軍を補佐する役職と、それに任命された人物の組合せとして正しいものはどれか。',a:'将軍後見職・徳川（一橋）慶喜',c:['政事総裁職・松平慶永','京都守護職・松平容保','大老・井伊直弼'],m:'将軍を後ろから見る＝将軍後見職、慶喜。',e:'一橋慶喜は将軍後見職となり、再び幕政の中心に近づいた。'},
+{phase:'文久の改革',q:'文久の改革で新設された、幕政を統轄する職と、それに任命された人物の組合せとして正しいものはどれか。',a:'政事総裁職・松平慶永（春嶽）',c:['将軍後見職・徳川慶喜','京都守護職・松平容保','老中・安藤信正'],m:'政治全体を総裁する＝政事総裁職、松平春嶽。',e:'松平慶永は政事総裁職となり、幕府改革に関わった。'},
+{phase:'文久の改革',q:'文久の改革で京都所司代の上に、京都の治安を維持するための職を設けたが、これを何というか。また、だれが任命されたか。',a:'京都守護職・松平容保',c:['将軍後見職・徳川慶喜','政事総裁職・松平慶永','大老・井伊直弼'],m:'京都を守る職＝京都守護職。会津の松平容保。',e:'京都守護職は尊攘派が集まる京都の治安維持を担った。'},
+{phase:'文久の改革',q:'文久の改革で大名に対して緩和された制度とは何か。',a:'参勤交代',c:['鎖国制度','五品江戸廻送令','身分制度'],m:'幕府の負担調整で参勤交代を緩める。',e:'参勤交代の緩和は、大名統制のあり方が変化したことを示す。'},
+{phase:'生麦事件と薩英戦争',q:'生麦事件が原因となっておこった戦いを何というか。また、それは西暦何年におこったか。',a:'薩英戦争・1863年',c:['下関戦争・1864年','アロー戦争・1856年','戊辰戦争・1868年'],m:'薩摩とイギリスが戦う＝薩英戦争。1863年。',e:'生麦事件でイギリス人が殺傷され、賠償問題から薩英戦争につながった。'},
+{phase:'尊攘派の動き',q:'1862年の後半になると、長州藩を中心とする尊攘派の志士と尊攘派の公卿が結びついて朝廷を動かすようになった。同年末、朝廷が幕府に対して攘夷の実行を命ずる勅使として派遣したのはだれか。',a:'三条実美',c:['大原重徳','岩倉具視','中山忠光'],m:'尊攘派公卿の代表格＝三条実美。',e:'三条実美ら尊攘派公卿は長州藩と結び、朝廷政治に大きな影響を与えた。'}
+];
+let pool=[],idx=0,score=0,streak=0,misses=[];
+function shuffle(a){return a.map(v=>[Math.random(),v]).sort((x,y)=>x[0]-y[0]).map(x=>x[1]);}
+function startQuiz(n){pool=shuffle(QUESTIONS).slice(0,Math.min(n,QUESTIONS.length));idx=0;score=0;streak=0;misses=[];showQuiz();}
+function startMissOnly(){const saved=JSON.parse(localStorage.getItem('historyRabbitMisses')||'[]');pool=saved.length?saved.map(i=>QUESTIONS[i]).filter(Boolean):shuffle(QUESTIONS).slice(0,10);idx=0;score=0;streak=0;misses=[];showQuiz();}
+function showQuiz(){document.getElementById('menu').style.display='none';document.getElementById('finish').style.display='none';document.getElementById('quiz').style.display='block';renderQ();}
+function renderQ(){const item=pool[idx];document.getElementById('result').style.display='none';document.getElementById('phase').textContent=item.phase;document.getElementById('question').textContent=item.q;document.getElementById('countLabel').textContent=(idx+1)+'/'+pool.length;document.getElementById('scoreNow').textContent='正解'+score;document.getElementById('fill').style.width=((idx)/pool.length*100)+'%';const opts=shuffle([item.a,...item.c]);const box=document.getElementById('choices');box.innerHTML='';opts.forEach(o=>{const b=document.createElement('button');b.className='choice';b.textContent=o;b.onclick=()=>answer(b,o,item);box.appendChild(b);});}
+function answer(btn,o,item){[...document.querySelectorAll('.choice')].forEach(b=>b.disabled=true);const ok=o===item.a;if(ok){btn.classList.add('correct');score++;streak++;}else{btn.classList.add('wrong');streak=0;const real=[...document.querySelectorAll('.choice')].find(b=>b.textContent===item.a);if(real)real.classList.add('correct');misses.push(QUESTIONS.indexOf(item));}
+document.getElementById('scorePill').textContent=score+'点';document.getElementById('streakPill').textContent='連続'+streak;document.getElementById('result').style.display='block';document.getElementById('resultTitle').textContent=ok?'正解！':'惜しい！';document.getElementById('resultMsg').textContent=ok?'うさぎ劇で覚える：'+item.a:'正解は「'+item.a+'」。ここで記憶フックを確認！';document.getElementById('memory').textContent=item.m;document.getElementById('mini').textContent=item.e;document.getElementById('resultRabbit').src=ok?(streak>=3?IMG.great:IMG.ok):IMG.bad;}
+function nextQuestion(){idx++;if(idx>=pool.length)return finish();renderQ();}
+function finish(){document.getElementById('quiz').style.display='none';document.getElementById('finish').style.display='block';document.getElementById('fill').style.width='100%';localStorage.setItem('historyRabbitMisses',JSON.stringify([...new Set(misses)]));document.getElementById('finishText').textContent=pool.length+'問中 '+score+'問正解。ミスは次回「前回ミスだけ復習」で確認できます。';}
+function backMenu(){document.getElementById('quiz').style.display='none';document.getElementById('finish').style.display='none';document.getElementById('menu').style.display='grid';}
+document.getElementById('totalPill').textContent=QUESTIONS.length+'問';
+</script>
+</body>
+</html>

@@ -112,6 +112,23 @@
       .feedback{grid-template-columns:70px 1fr;}
       .feedback img{width:66px; height:66px;}
     }
+  
+    /* mobile safety fix */
+    html,body{width:100%;max-width:100%;overflow-x:hidden;}
+    .wrap,.shell,.card{max-width:100%;}
+    .question,.choice,.bubble,.note{overflow-wrap:anywhere;word-break:break-word;}
+    svg{max-width:100%;height:auto;}
+    @media(max-width:600px){
+      body{font-size:15px;}
+      .app{padding:6px;}
+      .shell{border-radius:18px;border-width:2px;}
+      header{padding:10px;}
+      h1{font-size:24px;}
+      .choices{grid-template-columns:1fr;}
+      .choice{font-size:18px;padding:12px;}
+      .question{font-size:24px;line-height:1.35;}
+    }
+
   </style>
 </head>
 <body>
@@ -494,10 +511,16 @@ function showQuestion(){
   updateModeButtons(q.type);
   highlightMap(q.place, false);
 
-  q.choices.forEach((c,i)=>{
+  const mixed = q.choices.map((text, originalIndex)=>({text, correct: originalIndex === q.answer}));
+  for(let i=mixed.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [mixed[i], mixed[j]] = [mixed[j], mixed[i]];
+  }
+  q.currentChoices = mixed;
+  mixed.forEach((item,i)=>{
     const b = document.createElement("button");
     b.className = "choice";
-    b.textContent = c;
+    b.textContent = item.text;
     b.onclick = ()=>answer(i,b);
     document.getElementById("choices").appendChild(b);
   });
@@ -517,12 +540,13 @@ function answer(i, btn){
   locked = true;
   const q = questions[order[current]];
   const buttons = [...document.querySelectorAll(".choice")];
+  const chosen = q.currentChoices[i];
   buttons.forEach((b,idx)=>{
-    if(idx === q.answer) b.classList.add("correct");
-    if(idx === i && i !== q.answer) b.classList.add("wrong");
+    if(q.currentChoices[idx].correct) b.classList.add("correct");
+    if(idx === i && !chosen.correct) b.classList.add("wrong");
   });
 
-  if(i === q.answer){
+  if(chosen.correct){
     correctCount++;
     document.getElementById("fbRabbit").src = IMG.good;
     document.getElementById("fbTitle").textContent = "正解！理由までつながった";
@@ -536,7 +560,7 @@ function answer(i, btn){
   }else{
     document.getElementById("fbRabbit").src = IMG.bad;
     document.getElementById("fbTitle").textContent = "惜しい！ここは理由で判断";
-    document.getElementById("fbText").textContent = "正解は「" + q.choices[q.answer] + "」。" + q.explain;
+    document.getElementById("fbText").textContent = "正解は「" + (q.currentChoices.find(x=>x.correct)?.text || q.choices[q.answer]) + "」。" + q.explain;
     highlightMap(q.place, false);
   }
   document.getElementById("nextWrap").style.display = "flex";

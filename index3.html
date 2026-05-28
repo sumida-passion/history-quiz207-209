@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>幕末うさぎ歴史クイズ｜アドバンストレーニング</title>
+  <style>
+    :root{
+      --bg:#f7f2e8;
+      --card:#fffdf8;
+      --ink:#243044;
+      --sub:#667085;
+      --accent:#d86f45;
+      --accent2:#2f7d8c;
+      --good:#2e9b63;
+      --bad:#d94a4a;
+      --line:#d8c7aa;
+      --dark:#1f2937;
+      --yellow:#ffe7a3;
+      --blue:#dff4ff;
+      --pink:#ffe1e6;
+      --green:#ddf7e8;
+      --purple:#ece5ff;
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0; padding:0; height:100%; background:var(--bg); color:var(--ink); font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",Meiryo,sans-serif;}
+    body{overflow:hidden;}
+    button{font-family:inherit;}
+    .app{height:100dvh; display:flex; flex-direction:column; padding:12px; gap:10px; max-width:1180px; margin:0 auto;}
+    header{display:flex; align-items:center; justify-content:space-between; gap:10px; flex:0 0 auto;}
+    .brand{display:flex; align-items:center; gap:10px;}
+    .brand img{width:52px; height:52px; object-fit:contain; filter:drop-shadow(0 4px 8px rgba(0,0,0,.12));}
+    h1{font-size:clamp(20px,3vw,32px); line-height:1.05; margin:0;}
+    .tag{font-size:13px; color:var(--sub); margin-top:4px;}
+    .nav{display:flex; gap:8px; flex-wrap:wrap; justify-content:flex-end;}
+    .nav a,.smallBtn{border:0; text-decoration:none; color:#fff; background:var(--dark); border-radius:999px; padding:9px 12px; font-weight:800; font-size:13px; box-shadow:0 4px 0 rgba(0,0,0,.12);}
+    .nav a:nth-child(2){background:var(--accent2)}
+    .nav a:nth-child(3){background:var(--accent)}
+    main{flex:1 1 auto; min-height:0; display:grid; grid-template-columns:1.05fr .95fr; gap:10px;}
+    .panel{background:var(--card); border:3px solid #fff; border-radius:24px; box-shadow:0 10px 24px rgba(67,48,26,.12); min-height:0; overflow:hidden;}
+    .left{display:flex; flex-direction:column;}
+    .right{display:grid; grid-template-rows:auto 1fr auto; gap:10px; background:transparent; border:0; box-shadow:none; overflow:hidden;}
+    .modeBar{display:grid; grid-template-columns:repeat(3,1fr); gap:8px; padding:10px;}
+    .modeBtn{background:#fff; border:2px solid var(--line); border-radius:16px; padding:9px 6px; font-weight:900; color:var(--ink);}
+    .modeBtn.active{background:var(--dark); color:#fff; border-color:var(--dark);}
+    .questionArea{padding:14px; flex:1 1 auto; display:flex; flex-direction:column; gap:10px; min-height:0;}
+    .stageLabel{display:inline-flex; align-items:center; gap:8px; width:max-content; max-width:100%; background:var(--blue); border:2px solid #c5e6f4; border-radius:999px; padding:7px 12px; font-weight:900; font-size:13px;}
+    .qtitle{font-size:clamp(20px,2.7vw,31px); line-height:1.28; margin:0; font-weight:900;}
+    .qnote{font-size:14px; color:var(--sub); line-height:1.55; background:#fff8e6; border:2px dashed #e5c56c; border-radius:16px; padding:9px 11px;}
+    .choices{display:grid; grid-template-columns:1fr 1fr; gap:9px; margin-top:auto;}
+    .choice{background:#fff; border:2px solid #ddd0ba; border-radius:18px; padding:13px 11px; min-height:58px; text-align:left; font-weight:850; font-size:clamp(15px,1.8vw,19px); color:var(--ink); box-shadow:0 4px 0 #e7dbc7;}
+    .choice:active{transform:translateY(2px); box-shadow:0 2px 0 #e7dbc7;}
+    .choice.correct{background:#e3f8eb; border-color:var(--good);}
+    .choice.wrong{background:#ffe8e8; border-color:var(--bad);}
+    .feedback{min-height:96px; background:#fff; border-top:2px solid #eadfcb; padding:12px 14px; display:grid; grid-template-columns:92px 1fr; gap:10px; align-items:center;}
+    .feedback img{width:88px; height:88px; object-fit:contain;}
+    .fbTitle{font-weight:950; font-size:19px; margin-bottom:4px;}
+    .fbText{font-size:14px; line-height:1.5; color:#3e4656;}
+    .nextWrap{display:flex; gap:8px; margin-top:8px;}
+    .nextBtn{border:0; background:var(--accent); color:#fff; border-radius:14px; padding:9px 15px; font-weight:950; font-size:15px;}
+    .resetBtn{border:0; background:#6b7280; color:#fff; border-radius:14px; padding:9px 15px; font-weight:950; font-size:15px;}
+    .topCard{background:var(--card); border-radius:24px; border:3px solid #fff; box-shadow:0 10px 24px rgba(67,48,26,.12); padding:12px; overflow:hidden;}
+    .advMap{height:170px; position:relative; border-radius:20px; background:linear-gradient(180deg,#e8f7ff,#fffaf0); border:2px solid #e5dac4; overflow:hidden;}
+    .mapTitle{position:absolute; left:10px; top:8px; font-weight:950; font-size:13px; background:rgba(255,255,255,.82); border-radius:999px; padding:5px 9px; z-index:5;}
+    .japan{position:absolute; inset:24px 8px 4px 8px;}
+    .area{position:absolute; border:2px solid rgba(79,70,54,.28); background:#fff; color:#594a36; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:950; border-radius:999px; box-shadow:0 2px 4px rgba(0,0,0,.08); transition:.35s;}
+    .area.on{background:#ffb45d; border-color:#d8642a; color:#fff; transform:scale(1.08);}
+    .area.heat{background:#ff6b6b; border-color:#bd2d2d; color:#fff; transform:scale(1.12);}
+    .edo{left:67%; top:43%; width:54px; height:34px;}
+    .uraga{left:70%; top:61%; width:58px; height:32px;}
+    .kanagawa{left:62%; top:66%; width:62px; height:31px;}
+    .shimoda{left:60%; top:82%; width:55px; height:30px;}
+    .hakodate{left:78%; top:4%; width:68px; height:32px;}
+    .kyoto{left:42%; top:56%; width:55px; height:33px;}
+    .satsuma{left:9%; top:81%; width:62px; height:33px;}
+    .nagato{left:24%; top:67%; width:62px; height:31px;}
+    .kusunoki{left:35%; top:72%; width:50px; height:26px; opacity:.0;}
+    .timelineCard{background:var(--card); border-radius:24px; border:3px solid #fff; box-shadow:0 10px 24px rgba(67,48,26,.12); padding:12px; min-height:0; overflow:auto;}
+    .tlTitle{font-weight:950; margin-bottom:10px; display:flex; justify-content:space-between; gap:8px;}
+    .phase{display:flex; align-items:center; gap:8px; margin:8px 0;}
+    .dot{width:19px; height:19px; border-radius:50%; background:#fff; border:3px solid var(--line); flex:0 0 auto;}
+    .dot.on{background:var(--accent); border-color:#b9512c; box-shadow:0 0 0 5px rgba(216,111,69,.16);}
+    .phaseLine{width:3px; height:17px; margin-left:8px; background:var(--line);}
+    .phaseLine.on{background:var(--accent);}
+    .phaseText{font-weight:900; font-size:13px;}
+    .phaseSub{font-size:11px; color:var(--sub); font-weight:700;}
+    .deepCard{background:var(--card); border-radius:24px; border:3px solid #fff; box-shadow:0 10px 24px rgba(67,48,26,.12); padding:12px;}
+    .deepTitle{font-weight:950; margin-bottom:8px;}
+    .gaugeRow{display:grid; grid-template-columns:82px 1fr 38px; gap:8px; align-items:center; margin:7px 0; font-size:12px; font-weight:900;}
+    .bar{height:12px; background:#eee2cd; border-radius:999px; overflow:hidden;}
+    .bar span{display:block; height:100%; width:0%; background:var(--accent2); border-radius:999px; transition:.45s;}
+    .bar.tension span{background:#e05a47;}
+    .bar.open span{background:#3b82a0;}
+    .bar.anti span{background:#8b5cf6;}
+    .rabbitScene{display:grid; grid-template-columns:86px 1fr; gap:10px; align-items:center; margin-top:8px; background:#fff8e8; border:2px solid #ead8ae; border-radius:18px; padding:9px;}
+    .rabbitScene img{width:78px; height:78px; object-fit:contain;}
+    .bubble{background:#fff; border:2px solid #2f2b25; border-radius:18px; padding:9px 11px; font-weight:900; line-height:1.45; position:relative; font-size:13px;}
+    .bubble:before{content:""; position:absolute; left:-9px; top:28px; width:14px; height:14px; background:#fff; border-left:2px solid #2f2b25; border-bottom:2px solid #2f2b25; transform:rotate(45deg);}
+    .start{position:fixed; inset:0; background:linear-gradient(135deg,#fff2cf,#e5f8ff); z-index:20; display:flex; align-items:center; justify-content:center; padding:18px;}
+    .startBox{max-width:760px; width:100%; background:rgba(255,255,255,.92); border:4px solid #fff; border-radius:32px; padding:24px; box-shadow:0 18px 40px rgba(54,40,22,.18); text-align:center;}
+    .startBox img{width:118px; height:118px; object-fit:contain;}
+    .startBox h2{font-size:34px; margin:4px 0 8px;}
+    .startBox p{line-height:1.65; color:#485060; font-weight:700;}
+    .startBtn{border:0; background:var(--accent); color:#fff; border-radius:999px; padding:14px 26px; font-size:19px; font-weight:950; box-shadow:0 6px 0 #a84d2d;}
+    .hint{font-size:12px; color:var(--sub); margin-top:10px;}
+    @media(max-width:850px){
+      body{overflow:auto;}
+      .app{height:auto; min-height:100dvh;}
+      main{grid-template-columns:1fr;}
+      .choices{grid-template-columns:1fr;}
+      .right{grid-template-rows:auto auto auto;}
+      .feedback{grid-template-columns:70px 1fr;}
+      .feedback img{width:66px; height:66px;}
+    }
+  </style>
+</head>
+<body>
+  <div class="start" id="start">
+    <div class="startBox">
+      <img src="images/rabbit16.png" alt="うさぎ" onerror="this.style.display='none'">
+      <h2>アドバンストレーニング</h2>
+      <p>
+        ここでは、ただ答えるだけではなく、<br>
+        <strong>「なぜそうなったのか」「何が変わったのか」</strong>を考えます。<br>
+        幕末の出来事を、比較・因果・勢力変化でつなげよう。
+      </p>
+      <button class="startBtn" onclick="startGame()">はじめる</button>
+      <div class="hint">通常クイズ・トレーニングモードのあとにやると効果的です。</div>
+    </div>
+  </div>
+
+  <div class="app">
+    <header>
+      <div class="brand">
+        <img src="images/rabbit01.png" alt="うさぎ" onerror="this.style.display='none'">
+        <div>
+          <h1>幕末うさぎ歴史クイズ</h1>
+          <div class="tag">アドバンストレーニング｜点の暗記から「変化の理由」へ</div>
+        </div>
+      </div>
+      <nav class="nav">
+        <a href="index.html">通常クイズ</a>
+        <a href="index2.html">トレーニング</a>
+        <a href="index3.html">アドバンス</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="panel left">
+        <div class="modeBar">
+          <button class="modeBtn active" id="modeWhy">なぜ？</button>
+          <button class="modeBtn" id="modeCompare">比較</button>
+          <button class="modeBtn" id="modeCause">因果</button>
+        </div>
+        <div class="questionArea">
+          <div class="stageLabel" id="stageLabel">第1問</div>
+          <h2 class="qtitle" id="question">問題を読み込み中...</h2>
+          <div class="qnote" id="qnote">ヒントがここに出ます。</div>
+          <div class="choices" id="choices"></div>
+        </div>
+        <div class="feedback" id="feedback">
+          <img id="fbRabbit" src="images/rabbit08.png" alt="うさぎ" onerror="this.style.display='none'">
+          <div>
+            <div class="fbTitle" id="fbTitle">考える準備OK！</div>
+            <div class="fbText" id="fbText">このモードでは、答えの後に「変化の理由」を確認します。</div>
+            <div class="nextWrap" id="nextWrap" style="display:none;">
+              <button class="nextBtn" onclick="nextQuestion()">次へ</button>
+              <button class="resetBtn" onclick="restart()">最初から</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <aside class="right">
+        <section class="topCard">
+          <div class="advMap">
+            <div class="mapTitle">出来事が起こった場所・関係した場所</div>
+            <div class="japan">
+              <div class="area edo" id="map-edo">江戸</div>
+              <div class="area uraga" id="map-uraga">浦賀</div>
+              <div class="area kanagawa" id="map-kanagawa">神奈川</div>
+              <div class="area shimoda" id="map-shimoda">下田</div>
+              <div class="area hakodate" id="map-hakodate">箱館</div>
+              <div class="area kyoto" id="map-kyoto">京都</div>
+              <div class="area satsuma" id="map-satsuma">薩摩</div>
+              <div class="area nagato" id="map-nagato">長州</div>
+            </div>
+          </div>
+        </section>
+
+        <section class="timelineCard">
+          <div class="tlTitle">
+            <span>変化の流れ</span>
+            <span id="scoreText">0 / 0</span>
+          </div>
+          <div id="timeline"></div>
+        </section>
+
+        <section class="deepCard">
+          <div class="deepTitle">時代の温度ゲージ</div>
+          <div class="gaugeRow">
+            <div>幕府不安</div><div class="bar tension"><span id="gTension"></span></div><div id="tensionVal">0%</div>
+          </div>
+          <div class="gaugeRow">
+            <div>開国圧力</div><div class="bar open"><span id="gOpen"></span></div><div id="openVal">0%</div>
+          </div>
+          <div class="gaugeRow">
+            <div>尊王攘夷</div><div class="bar anti"><span id="gAnti"></span></div><div id="antiVal">0%</div>
+          </div>
+          <div class="rabbitScene">
+            <img id="sceneRabbit" src="images/rabbit03.png" alt="うさぎ" onerror="this.style.display='none'">
+            <div class="bubble" id="sceneBubble">事件の名前だけでなく、「なぜ？」をつなげよう。</div>
+          </div>
+        </section>
+      </aside>
+    </main>
+  </div>
+
+<script>
+const IMG = {
+  normal:"images/rabbit01.png",
+  think:"images/rabbit08.png",
+  good:"images/rabbit16.png",
+  bad:"images/rabbit06.png",
+  shock:"images/rabbit11.png",
+  sad:"images/rabbit05.png",
+  point:"images/rabbit14.png",
+  fight:"images/rabbit13.png",
+  question:"images/rabbit04.png",
+  wow:"images/rabbit10.png",
+  calm:"images/rabbit12.png",
+  cry:"images/rabbit09.png",
+  spark:"images/rabbit15.png",
+  run:"images/rabbit07.png",
+  base:"images/rabbit03.png"
+};
+
+const questions = [
+  {
+    type:"why",
+    year:"1853",
+    title:"ペリー来航",
+    phase:"開国の衝撃",
+    place:["uraga"],
+    q:"なぜペリー来航は、幕府にとって大きな衝撃だったのか。",
+    note:"ポイント：『外国船が来た』だけでなく、幕府の外交判断が揺さぶられたことを考えよう。",
+    choices:[
+      "強い軍事力を背景に開国を迫られ、幕府だけで判断しにくい状況になったから",
+      "ペリーが朝廷の命令で日本に来たから",
+      "日本がすでにアメリカの植民地になっていたから",
+      "薩摩藩が幕府に開国を命じたから"
+    ],
+    answer:0,
+    explain:"黒船の軍事的圧力により、幕府は従来の鎖国体制を維持しにくくなった。ここから『外国への対応』が政治問題化する。",
+    scene:"黒船うさぎ『開国してくださーい』 幕府うさぎ『え、急に!?』",
+    rabbit:"shock",
+    gauges:{tension:20,open:35,anti:5}
+  },
+  {
+    type:"compare",
+    year:"1854",
+    title:"日米和親条約",
+    phase:"開国のはじまり",
+    place:["kanagawa","shimoda","hakodate"],
+    q:"日米和親条約の特徴として正しいものはどれか。",
+    note:"比較ポイント：日米修好通商条約との違い。和親条約は『貿易』より前の段階。",
+    choices:[
+      "下田・箱館を開港し、アメリカ船に燃料や食料を補給できるようにした",
+      "関税自主権を回復し、日本が自由に税率を決められるようにした",
+      "横浜・長崎・神戸などで本格的な貿易を開始した",
+      "薩摩藩とイギリスが直接結んだ軍事同盟である"
+    ],
+    answer:0,
+    explain:"和親条約は『開港・補給・領事駐在』が中心。本格的な貿易開始は1858年の日米修好通商条約。",
+    scene:"うさぎ港番『まずは補給だけね』 黒船うさぎ『水と食料、助かります』",
+    rabbit:"point",
+    gauges:{tension:30,open:50,anti:10}
+  },
+  {
+    type:"compare",
+    year:"1858",
+    title:"日米修好通商条約",
+    phase:"不平等条約の衝撃",
+    place:["kanagawa","shimoda","hakodate"],
+    q:"日米修好通商条約が『不平等条約』とされる理由として正しいものはどれか。",
+    note:"比較ポイント：和親条約より一歩進んで、貿易と不平等な条件が問題になる。",
+    choices:[
+      "領事裁判権を認め、関税自主権がなかったから",
+      "日本がアメリカの大統領を選ぶことになったから",
+      "幕府がすべての藩を廃止したから",
+      "朝廷が幕府を完全に支配したから"
+    ],
+    answer:0,
+    explain:"領事裁判権と関税自主権の欠如が不平等条約の重要ポイント。ここで国内の反発がさらに強まる。",
+    scene:"幕府うさぎ『これ、条件きびしくない？』 反対派うさぎ『だから無断調印はまずい！』",
+    rabbit:"sad",
+    gauges:{tension:50,open:70,anti:30}
+  },
+  {
+    type:"cause",
+    year:"1858-1859",
+    title:"安政の大獄",
+    phase:"反対派への弾圧",
+    place:["edo","kyoto"],
+    q:"安政の大獄が起こった背景として、最も適切なものはどれか。",
+    note:"因果ポイント：条約調印や将軍継嗣問題への反対が強まり、井伊直弼が強硬に処分した。",
+    choices:[
+      "条約調印や将軍継嗣問題への反対派を、井伊直弼が厳しく処分した",
+      "ペリーが日本の反対派を処分するよう命令した",
+      "薩摩藩がイギリスと戦ったため、幕府が全国民を処分した",
+      "明治政府が自由民権運動を取り締まった"
+    ],
+    answer:0,
+    explain:"井伊直弼は反対派を厳しく弾圧した。これにより幕府への反発が一気に高まり、次の事件につながる。",
+    scene:"井伊うさぎ『反対は許さん！』 反対派うさぎ『これは怒りがたまる…』",
+    rabbit:"fight",
+    gauges:{tension:70,open:70,anti:55}
+  },
+  {
+    type:"cause",
+    year:"1860",
+    title:"桜田門外の変",
+    phase:"反発の爆発",
+    place:["edo"],
+    q:"桜田門外の変は、何への反発が爆発した事件と考えると理解しやすいか。",
+    note:"因果ポイント：安政の大獄 → 反発 → 井伊直弼暗殺。",
+    choices:[
+      "安政の大獄で反対派を弾圧した井伊直弼への反発",
+      "日米和親条約で箱館が開かれたことへの反発",
+      "薩英戦争で薩摩藩が負けたことへの反発",
+      "大政奉還で徳川慶喜が政権を返したことへの反発"
+    ],
+    answer:0,
+    explain:"桜田門外の変は、弾圧への反発が大老暗殺という形で爆発した事件。幕府の権威低下が目に見える形になった。",
+    scene:"雪の江戸城前。うさぎ浪士『許さん！』 井伊うさぎ『えっ!?』",
+    rabbit:"shock",
+    gauges:{tension:82,open:70,anti:68}
+  },
+  {
+    type:"why",
+    year:"1862",
+    title:"公武合体",
+    phase:"幕府の立て直し",
+    place:["edo","kyoto"],
+    q:"公武合体は、なぜ進められたのか。",
+    note:"ポイント：幕府単独では政治を安定させにくくなり、朝廷の権威を借りようとした。",
+    choices:[
+      "幕府と朝廷が協力して、政治の安定を図ろうとしたから",
+      "幕府が外国人をすべて追放して鎖国を完全復活させたから",
+      "薩摩藩と長州藩がすぐに同盟を結んだから",
+      "農民が全国で選挙を始めたから"
+    ],
+    answer:0,
+    explain:"幕府の力だけでは不安定になったため、朝廷との協力で権威を補おうとした。『公＝朝廷』『武＝幕府』。",
+    scene:"朝廷うさぎ『協力します？』 幕府うさぎ『なんとか安定させたい…』",
+    rabbit:"calm",
+    gauges:{tension:78,open:68,anti:60}
+  },
+  {
+    type:"why",
+    year:"1863",
+    title:"薩英戦争",
+    phase:"攘夷から学習へ",
+    place:["satsuma"],
+    q:"薩英戦争のあと、薩摩藩の考え方に変化が生まれた理由として最も適切なものはどれか。",
+    note:"ポイント：攘夷を唱えても、西洋の軍事力の強さを体感すると考えが変わる。",
+    choices:[
+      "イギリスの強さを知り、西洋技術を取り入れる必要性を感じたから",
+      "イギリスが薩摩藩を完全に滅ぼしたから",
+      "幕府が薩摩藩に海外留学を禁止したから",
+      "ペリーが薩摩藩主になったから"
+    ],
+    answer:0,
+    explain:"薩摩藩はイギリスとの戦いを通して、西洋の軍事力や技術を学ぶ必要を実感した。ここが『考えの転換』ポイント。",
+    scene:"薩摩うさぎ『攘夷だ！』 ドカーン！ → 『西洋技術、強すぎる…学ぼう』",
+    rabbit:"wow",
+    gauges:{tension:86,open:78,anti:50}
+  },
+  {
+    type:"why",
+    year:"1863",
+    title:"八月十八日の政変",
+    phase:"尊王攘夷のゆれ",
+    place:["kyoto","nagato"],
+    q:"八月十八日の政変で、長州藩が苦しい立場になったのはなぜか。",
+    note:"ポイント：京都での政治的主導権争い。長州藩は朝廷内での影響力を失う。",
+    choices:[
+      "会津藩・薩摩藩などにより、長州藩が京都から追い落とされたから",
+      "長州藩がアメリカと単独で条約を結んだから",
+      "幕府が長州藩を北海道へ移したから",
+      "薩英戦争で長州藩がイギリスに勝利したから"
+    ],
+    answer:0,
+    explain:"尊王攘夷派の中心だった長州藩は、京都政局で追い落とされる。以後、長州は巻き返しを図る流れになる。",
+    scene:"京都うさぎ会議『長州は下がって！』 長州うさぎ『え、京都から出されるの!?』",
+    rabbit:"cry",
+    gauges:{tension:88,open:75,anti:72}
+  },
+  {
+    type:"cause",
+    year:"1864",
+    title:"禁門の変",
+    phase:"京都での衝突",
+    place:["kyoto","nagato"],
+    q:"禁門の変は、どのような流れの中で起こったと考えるとよいか。",
+    note:"因果ポイント：京都から追い落とされた長州藩が、勢力回復をめざして衝突した。",
+    choices:[
+      "長州藩が京都での勢力回復をめざし、御所周辺で戦闘になった",
+      "薩摩藩がイギリスと同盟して江戸城を攻撃した",
+      "幕府がペリーを京都に招いて宴会を開いた",
+      "朝廷が全国の港をすべて閉じた"
+    ],
+    answer:0,
+    explain:"八月十八日の政変で追い落とされた長州が、京都で巻き返そうとして戦闘に発展した。長州の苦境が深まる。",
+    scene:"長州うさぎ『京都へ戻る！』 京都うさぎ『それは通せない！』",
+    rabbit:"fight",
+    gauges:{tension:92,open:75,anti:80}
+  },
+  {
+    type:"compare",
+    year:"まとめ",
+    title:"条約比較",
+    phase:"細部の整理",
+    place:["kanagawa","shimoda","hakodate"],
+    q:"日米和親条約と日米修好通商条約の違いとして最も適切なものはどれか。",
+    note:"比較問題：実際のテストで落としやすいポイント。『開港』と『貿易＋不平等』を分ける。",
+    choices:[
+      "和親条約は開港・補給中心、修好通商条約は貿易開始と不平等条約が中心",
+      "和親条約は明治政府、修好通商条約は鎌倉幕府が結んだ",
+      "和親条約は薩摩藩、修好通商条約は長州藩が結んだ",
+      "和親条約は関税自主権回復、修好通商条約は参勤交代開始が中心"
+    ],
+    answer:0,
+    explain:"和親条約＝開港・補給。修好通商条約＝貿易開始・不平等条約。この区別は頻出。",
+    scene:"うさぎ先生『和親は入口、通商は本格スタート！』",
+    rabbit:"spark",
+    gauges:{tension:94,open:82,anti:80}
+  },
+  {
+    type:"cause",
+    year:"まとめ",
+    title:"幕末の大きな流れ",
+    phase:"点を線にする",
+    place:["uraga","kanagawa","edo","kyoto","satsuma","nagato"],
+    q:"この範囲全体の流れとして、最も自然なものはどれか。",
+    note:"総まとめ：開国の衝撃から、国内政治の混乱、藩の変化へ。",
+    choices:[
+      "開国の圧力 → 不平等条約 → 反対派弾圧 → 反発の爆発 → 藩の考え方の変化",
+      "明治維新 → 鎖国開始 → ペリー来航 → 平安京遷都 → 薩英戦争",
+      "薩英戦争 → 日米和親条約 → ペリー来航 → 安政の大獄 → 縄文時代",
+      "公武合体 → 関ヶ原の戦い → 鎌倉幕府成立 → 日米修好通商条約"
+    ],
+    answer:0,
+    explain:"幕末は『外国の圧力』がきっかけで、幕府の判断への不満が高まり、国内政治の対立と藩の変化につながっていく。",
+    scene:"うさぎ地図『点が線になった！歴史は事件の連続じゃなく、圧力と変化の物語だ』",
+    rabbit:"good",
+    gauges:{tension:100,open:90,anti:84}
+  }
+];
+
+let order = [...Array(questions.length).keys()];
+let current = 0;
+let locked = false;
+let correctCount = 0;
+let maxG = {tension:0, open:0, anti:0};
+
+function startGame(){
+  document.getElementById("start").style.display="none";
+  restart();
+}
+
+function restart(){
+  current = 0;
+  correctCount = 0;
+  locked = false;
+  maxG = {tension:0, open:0, anti:0};
+  document.querySelectorAll(".area").forEach(e=>{e.classList.remove("on","heat")});
+  renderTimeline();
+  updateGauges();
+  showQuestion();
+}
+
+function showQuestion(){
+  locked = false;
+  const q = questions[order[current]];
+  document.getElementById("stageLabel").textContent = `${current+1}問目｜${q.year} ${q.title}`;
+  document.getElementById("question").textContent = q.q;
+  document.getElementById("qnote").textContent = q.note;
+  document.getElementById("choices").innerHTML = "";
+  document.getElementById("nextWrap").style.display = "none";
+  document.getElementById("fbRabbit").src = IMG.think;
+  document.getElementById("fbTitle").textContent = "考えてみよう";
+  document.getElementById("fbText").textContent = "答えを選ぶと、理由と変化が表示されます。";
+  updateModeButtons(q.type);
+  highlightMap(q.place, false);
+
+  q.choices.forEach((c,i)=>{
+    const b = document.createElement("button");
+    b.className = "choice";
+    b.textContent = c;
+    b.onclick = ()=>answer(i,b);
+    document.getElementById("choices").appendChild(b);
+  });
+
+  document.getElementById("sceneRabbit").src = IMG[q.rabbit] || IMG.base;
+  document.getElementById("sceneBubble").textContent = q.scene;
+}
+
+function updateModeButtons(type){
+  const ids = {why:"modeWhy", compare:"modeCompare", cause:"modeCause"};
+  Object.values(ids).forEach(id=>document.getElementById(id).classList.remove("active"));
+  document.getElementById(ids[type] || "modeWhy").classList.add("active");
+}
+
+function answer(i, btn){
+  if(locked) return;
+  locked = true;
+  const q = questions[order[current]];
+  const buttons = [...document.querySelectorAll(".choice")];
+  buttons.forEach((b,idx)=>{
+    if(idx === q.answer) b.classList.add("correct");
+    if(idx === i && i !== q.answer) b.classList.add("wrong");
+  });
+
+  if(i === q.answer){
+    correctCount++;
+    document.getElementById("fbRabbit").src = IMG.good;
+    document.getElementById("fbTitle").textContent = "正解！理由までつながった";
+    document.getElementById("fbText").textContent = q.explain;
+    maxG.tension = Math.max(maxG.tension, q.gauges.tension);
+    maxG.open = Math.max(maxG.open, q.gauges.open);
+    maxG.anti = Math.max(maxG.anti, q.gauges.anti);
+    updateGauges();
+    highlightMap(q.place, true);
+    markTimeline(current);
+  }else{
+    document.getElementById("fbRabbit").src = IMG.bad;
+    document.getElementById("fbTitle").textContent = "惜しい！ここは理由で判断";
+    document.getElementById("fbText").textContent = "正解は「" + q.choices[q.answer] + "」。" + q.explain;
+    highlightMap(q.place, false);
+  }
+  document.getElementById("nextWrap").style.display = "flex";
+  document.getElementById("scoreText").textContent = `${correctCount} / ${questions.length}`;
+}
+
+function nextQuestion(){
+  if(current < questions.length-1){
+    current++;
+    showQuestion();
+  }else{
+    finish();
+  }
+}
+
+function finish(){
+  document.getElementById("stageLabel").textContent = "完成";
+  document.getElementById("question").textContent = "アドバンストレーニング完了！";
+  document.getElementById("qnote").textContent = "事件名を覚えるだけでなく、『外国の圧力→幕府の動揺→国内対立→藩の変化』という流れを確認できました。";
+  document.getElementById("choices").innerHTML = "";
+  document.getElementById("fbRabbit").src = IMG.good;
+  document.getElementById("fbTitle").textContent = `結果：${correctCount} / ${questions.length}`;
+  document.getElementById("fbText").textContent = "もう一度やると、地図・時系列・理由がさらに結びつきます。";
+  document.getElementById("nextWrap").style.display = "flex";
+  document.querySelector(".nextBtn").textContent = "もう一度";
+  document.querySelector(".nextBtn").onclick = restart;
+  document.getElementById("sceneRabbit").src = IMG.spark;
+  document.getElementById("sceneBubble").textContent = "点の暗記から、変化の理由へ。ここまで来たらかなり強い！";
+}
+
+function renderTimeline(){
+  const tl = document.getElementById("timeline");
+  tl.innerHTML = "";
+  questions.forEach((q,idx)=>{
+    const row = document.createElement("div");
+    row.className = "phase";
+    row.innerHTML = `
+      <div>
+        <div class="dot" id="dot-${idx}"></div>
+        ${idx < questions.length-1 ? '<div class="phaseLine" id="line-'+idx+'"></div>' : ''}
+      </div>
+      <div>
+        <div class="phaseText">${q.year}｜${q.title}</div>
+        <div class="phaseSub">${q.phase}</div>
+      </div>
+    `;
+    tl.appendChild(row);
+  });
+  document.getElementById("scoreText").textContent = `0 / ${questions.length}`;
+}
+
+function markTimeline(idx){
+  const dot = document.getElementById("dot-"+idx);
+  if(dot) dot.classList.add("on");
+  const line = document.getElementById("line-"+(idx-1));
+  if(line) line.classList.add("on");
+}
+
+function highlightMap(list, commit){
+  if(commit){
+    list.forEach(id=>{
+      const el = document.getElementById("map-"+id);
+      if(el){el.classList.add("on"); if(current > 5) el.classList.add("heat");}
+    });
+  }else{
+    document.querySelectorAll(".area").forEach(e=>e.classList.remove("heat"));
+    list.forEach(id=>{
+      const el = document.getElementById("map-"+id);
+      if(el) el.classList.add("heat");
+    });
+  }
+}
+
+function updateGauges(){
+  setGauge("gTension","tensionVal",maxG.tension);
+  setGauge("gOpen","openVal",maxG.open);
+  setGauge("gAnti","antiVal",maxG.anti);
+}
+
+function setGauge(barId,valId,v){
+  document.getElementById(barId).style.width = v + "%";
+  document.getElementById(valId).textContent = v + "%";
+}
+
+renderTimeline();
+showQuestion();
+</script>
+</body>
+</html>

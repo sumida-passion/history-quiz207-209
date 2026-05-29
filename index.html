@@ -1,78 +1,113 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ja">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>幕末うさぎ歴史クイズ</title>
 <style>
-  :root{--bg:#fff7e8;--ink:#2b2118;--main:#ffb547;--sub:#6f4b2a;--good:#2e9d68;--bad:#d94a4a;--card:#ffffff;--line:#ead6b9;}
-  *{box-sizing:border-box} html,body{margin:0;height:100%;font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif;color:var(--ink);background:linear-gradient(180deg,#fff7e8,#fff1d6);}
-  button,a{font:inherit} .app{min-height:100svh;display:flex;align-items:center;justify-content:center;padding:16px;}
-  .shell{width:min(1100px,100%);background:rgba(255,255,255,.82);border:3px solid #f0d4a6;border-radius:28px;box-shadow:0 18px 45px rgba(92,62,24,.16);overflow:hidden;}
-  header{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 18px;background:#fff3dc;border-bottom:2px solid #f1d7ad;}
-  .brand{display:flex;align-items:center;gap:10px}.brand img{width:56px;height:56px;object-fit:contain}.brand h1{font-size:clamp(20px,3vw,34px);margin:0;line-height:1.1}.brand small{display:block;color:#7a5b39;font-weight:700;margin-top:2px}.topBtns{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
-  .miniBtn{display:inline-flex;align-items:center;justify-content:center;text-decoration:none;background:#fff;border:2px solid #e9c98e;border-radius:999px;padding:9px 13px;color:#4b351f;font-weight:900;box-shadow:0 3px 0 #d3ad68;cursor:pointer}.miniBtn:active{transform:translateY(2px);box-shadow:0 1px 0 #d3ad68}.miniBtn.adv{opacity:.72}
-  main{padding:18px}.home{display:grid;grid-template-columns:1.05fr .95fr;gap:18px;align-items:center}.hero{background:linear-gradient(135deg,#fff,#fff2cf);border:2px solid var(--line);border-radius:24px;padding:22px;min-height:430px;display:flex;flex-direction:column;justify-content:space-between}.hero h2{font-size:clamp(30px,5vw,56px);line-height:1.05;margin:0 0 12px}.hero p{font-size:clamp(16px,2.2vw,22px);line-height:1.6;margin:0;color:#5f472f;font-weight:800}.modeGrid{display:grid;gap:12px;margin-top:18px}.modeBtn{border:0;border-radius:20px;padding:17px 18px;text-align:left;background:#fff;border:3px solid #f0cf91;box-shadow:0 5px 0 #d0a358;cursor:pointer;color:inherit}.modeBtn strong{display:block;font-size:22px}.modeBtn span{display:block;color:#6a533d;font-weight:800;margin-top:4px}.modeBtn.primary{background:linear-gradient(135deg,#ffe08c,#ffb547);border-color:#e2a947}.modeBtn:hover{filter:brightness(1.02)}.modeBtn:active{transform:translateY(3px);box-shadow:0 2px 0 #d0a358}.sideCard{background:#fff;border:2px solid var(--line);border-radius:24px;padding:18px;text-align:center}.sideCard img{width:min(250px,70%);height:auto}.speech{margin:12px auto 0;background:#fff7d4;border:3px solid #f0c15d;border-radius:20px;padding:12px;font-size:20px;font-weight:900;position:relative}.speech:before{content:"";position:absolute;top:-14px;left:48%;border:8px solid transparent;border-bottom-color:#f0c15d}.screen{display:none}.screen.active{display:block}.quizLayout{display:grid;grid-template-columns:1fr 290px;gap:16px}.quizCard{background:#fff;border:2px solid var(--line);border-radius:24px;padding:18px;min-height:430px}.meta{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}.pill{background:#fff1d5;border:2px solid #ebc88d;border-radius:999px;padding:7px 11px;font-weight:900;color:#684923}.question{font-size:clamp(22px,3.2vw,36px);line-height:1.35;font-weight:900;margin:10px 0 14px}.choices{display:grid;gap:10px}.choice{width:100%;border:3px solid #ead0a0;background:#fffaf0;border-radius:18px;padding:14px 14px;text-align:left;font-weight:900;font-size:clamp(16px,2.1vw,21px);cursor:pointer}.choice.correct{background:#e8fff2;border-color:var(--good)}.choice.wrong{background:#fff0f0;border-color:var(--bad)}.choice:disabled{cursor:default}.feedback{margin-top:14px;border-radius:18px;padding:14px;background:#fff6da;border:2px solid #e8c987;font-weight:800;line-height:1.55;display:none}.feedback.show{display:block}.resultTitle{font-size:26px;font-weight:1000;margin:0 0 8px}.rabbitPanel{background:#fff;border:2px solid var(--line);border-radius:24px;padding:14px;text-align:center;min-height:430px;display:flex;flex-direction:column;justify-content:space-between}.rabbitPanel img{width:170px;max-width:95%;margin:auto;object-fit:contain}.rabbitSay{background:#fff3ce;border:3px solid #efc56d;border-radius:18px;padding:11px;font-weight:1000;line-height:1.35}.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}.bigBtn{border:0;border-radius:16px;padding:13px 18px;font-weight:1000;background:#ffb547;color:#2e2110;box-shadow:0 4px 0 #c98a25;cursor:pointer}.bigBtn.secondary{background:#fff;border:2px solid #e3c28a}.bigBtn:active{transform:translateY(3px);box-shadow:0 1px 0 #c98a25}.final{display:none;text-align:center;background:#fff;border:2px solid var(--line);border-radius:24px;padding:24px}.final img{width:160px}.score{font-size:48px;font-weight:1000;margin:8px 0;color:#c0791a}@media(max-width:820px){.home,.quizLayout{grid-template-columns:1fr}.rabbitPanel{min-height:auto}.sideCard{display:none} header{align-items:flex-start}.brand img{width:48px;height:48px}.topBtns{font-size:14px}.quizCard{min-height:auto}.rabbitPanel img{width:120px}.app{padding:8px} main{padding:10px}.shell{border-radius:20px}}
+:root{--ink:#1f2b3a;--muted:#66758a;--cream:#fff8ec;--card:#fff;--line:#f0d5a8;--red:#d63b32;--blue:#0b7fe8;--navy:#17365f;--gold:#ffc44f;--shadow:0 14px 28px rgba(65,44,18,.12);--r:26px}
+*{box-sizing:border-box}body{margin:0;min-height:100vh;font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",Meiryo,sans-serif;color:var(--ink);background:linear-gradient(135deg,#fffaf0,#f4e8d8);overflow-x:hidden}
+.app{width:min(1180px,calc(100vw - 28px));margin:18px auto 32px}
+.header{display:flex;align-items:center;justify-content:space-between;gap:14px;background:rgba(255,255,255,.82);border:3px solid var(--line);border-radius:var(--r);padding:14px 18px;box-shadow:var(--shadow)}
+.brand{display:flex;align-items:center;gap:12px}.logo{width:54px;height:54px;object-fit:contain}.title h1{margin:0;font-size:clamp(24px,3vw,40px);line-height:1.05}.title p{margin:4px 0 0;color:var(--muted);font-weight:800;font-size:14px}
+.nav{display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end}.nav a{color:var(--navy);text-decoration:none;background:#fff;border:3px solid #e2c48d;border-radius:999px;padding:10px 15px;font-weight:900;box-shadow:0 5px 0 rgba(156,118,49,.25)}
+.screen{display:none}.screen.active{display:block}
+.hero{margin-top:14px;background:rgba(255,255,255,.82);border:3px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);padding:22px;display:grid;grid-template-columns:1.06fr .94fr;gap:20px}
+.card{background:linear-gradient(180deg,#fffdfa,#fff5df);border:3px solid #ead2a8;border-radius:22px;padding:24px}
+.card h2{font-size:clamp(36px,5.4vw,70px);line-height:1.05;margin:0 0 18px;color:#34251c;letter-spacing:.04em}.card p{font-size:clamp(16px,2vw,22px);line-height:1.7;margin:0 0 18px;font-weight:850;color:#5a4b3d}
+.modeGrid{display:grid;gap:12px;margin-top:18px}.modeBtn{border:3px solid #e7c891;border-radius:20px;background:#fff;padding:16px 18px;text-align:left;font-weight:950;font-size:clamp(18px,2.3vw,26px);box-shadow:0 6px 0 rgba(156,118,49,.28);cursor:pointer;color:#2d251f}.modeBtn small{display:block;color:#6c5b48;font-size:14px;margin-top:6px;font-weight:850;line-height:1.4}.train{background:linear-gradient(180deg,#eaf5ff,#fff);border-color:#bad7f4}.primary{background:linear-gradient(180deg,#ffd06d,#ffb83a);border-color:#df9e2b}.adv{background:linear-gradient(180deg,#fff0f0,#fff);border-color:#f1b6b6}
+.stage{background:linear-gradient(180deg,#fffdfa,#fff6e8);border:3px solid #ead2a8;border-radius:22px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;padding:18px;min-height:390px}.stage img{width:min(330px,64vw);height:240px;object-fit:contain;filter:drop-shadow(0 10px 8px rgba(0,0,0,.12))}
+.speech{position:relative;background:#fff7d7;border:3px solid #f2c35b;border-radius:18px;padding:14px 18px;font-weight:950;font-size:clamp(16px,2vw,22px);text-align:center;line-height:1.5}.speech:before{content:"";position:absolute;top:-13px;left:48%;border-left:10px solid transparent;border-right:10px solid transparent;border-bottom:13px solid #f2c35b}
+.select{margin-top:14px;background:rgba(255,255,255,.86);border:3px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);padding:22px}.select h2{margin:0 0 8px;font-size:clamp(28px,4vw,48px)}.select p{margin:0 0 16px;font-weight:850;color:#5a4b3d;line-height:1.6}.challengeBtns{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.challenge{border:0;border-radius:20px;padding:20px 12px;font-weight:1000;font-size:clamp(20px,2.8vw,32px);background:var(--red);color:#fff;box-shadow:0 7px 0 #9c2420;cursor:pointer}.challenge:nth-child(1){background:#17365f;box-shadow:0 7px 0 #0d2340}.challenge:nth-child(2){background:#2166a8;box-shadow:0 7px 0 #164675}
+.quiz{margin-top:14px;background:rgba(255,255,255,.86);border:3px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);padding:18px;display:grid;grid-template-columns:1.2fr .8fr;gap:16px}.qcard{background:#fff;border:3px solid #e6eef7;border-radius:22px;padding:18px;overflow:hidden}.status{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}.pill{background:#f3f8ff;border:3px solid #c9dff5;border-radius:999px;padding:8px 14px;font-weight:1000;color:#294e73}.question{font-size:clamp(22px,3.2vw,38px);line-height:1.35;font-weight:1000;margin:0 0 14px;word-break:break-word}.choices{display:grid;gap:10px}.choice{border:3px solid #dce9f5;background:#fff;border-radius:18px;padding:15px 16px;text-align:left;font-size:clamp(19px,2.4vw,28px);font-weight:1000;color:#0885ff;cursor:pointer}.choice.correct{background:#ecfff1;border-color:#3fc46e;color:#177139}.choice.wrong{background:#fff0f0;border-color:#e85c5c;color:#b82222}.side{display:grid;gap:12px;align-content:start}.mini,.feedback{background:#fffdf8;border:3px solid #ead2a8;border-radius:22px;padding:14px}.mini{text-align:center}.mini img{width:min(220px,60vw);height:160px;object-fit:contain}.mini .speech{font-size:16px;margin-top:8px}.feedback h3{margin:0 0 8px;font-size:22px;color:#9b5d00}.feedback p{margin:8px 0;line-height:1.6;font-weight:800}
+.controls{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}.ctrl{border:3px solid #d9e6f3;background:#fff;border-radius:16px;padding:12px 16px;font-weight:1000;cursor:pointer;box-shadow:0 5px 0 rgba(86,112,145,.22)}.ctrl.red{background:var(--red);color:#fff;border-color:var(--red)}
+.result{margin-top:14px;background:rgba(255,255,255,.88);border:3px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);padding:22px;text-align:center}.result h2{font-size:clamp(32px,5vw,64px);margin:0 0 12px}.scoreBig{font-size:clamp(44px,8vw,96px);font-weight:1000;color:var(--red);line-height:1}.rank{display:inline-block;margin:16px 0;padding:10px 18px;border-radius:999px;background:#fff3c4;border:3px solid #f0bf45;font-weight:1000;font-size:22px}.resultGrid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:16px;text-align:left}.resultBox{background:#fff;border:3px solid #e6eef7;border-radius:18px;padding:16px}.resultBox h3{margin:0 0 8px;color:#17365f}.certificate{display:none;margin-top:18px;padding:22px;border:8px double #d4a536;border-radius:24px;background:linear-gradient(135deg,#fff9df,#fff)}.certificate.show{display:block}.certificate h3{font-size:clamp(30px,4vw,52px);margin:0 0 8px;color:#8b5a00}.certificate p{font-size:20px;font-weight:900}.footer{text-align:center;color:#8b7a67;font-weight:800;margin:18px 0}
+@media(max-width:760px){.app{width:min(100vw - 16px,680px);margin:8px auto 20px}.header{align-items:flex-start;flex-direction:column;padding:12px}.nav{width:100%;display:grid;grid-template-columns:1fr;gap:8px}.nav a{text-align:center;padding:10px 8px}.logo{width:44px;height:44px}.hero{grid-template-columns:1fr;padding:12px;gap:12px}.card{padding:18px}.stage{min-height:250px}.stage img{height:170px}.challengeBtns{grid-template-columns:1fr}.quiz{grid-template-columns:1fr;padding:10px}.resultGrid{grid-template-columns:1fr}.question{font-size:24px}.choice{font-size:22px;padding:14px}}
 </style>
 </head>
 <body>
-<div class="app"><div class="shell">
-<header>
-  <div class="brand"><img src="images/rabbit01.png" onerror="this.style.display='none'" alt="うさぎ"><div><h1>幕末うさぎ歴史クイズ</h1><small>207〜209ページ範囲</small></div></div>
-  <div class="topBtns"><a class="miniBtn" href="index2.html">トレーニングモード</a><a class="miniBtn adv" href="index3.html">アドバンストレーニング</a></div>
+<div class="app">
+<header class="header">
+  <div class="brand"><img class="logo" src="images/rabbit10.png" alt="うさぎ"><div class="title"><h1>幕末うさぎ歴史クイズ</h1><p>207〜209ページ範囲｜点で覚え、線でつなげる</p></div></div>
+  <nav class="nav"><a href="index2.html">トレーニングモード</a><a href="index3.html">アドバンストレーニング</a></nav>
 </header>
-<main>
+
 <section id="home" class="screen active">
-  <div class="home">
-    <div class="hero">
-      <div><h2>点で覚える。<br>線でつなげる。</h2><p>まずは通常クイズでテンポよく確認。正解後には、語呂・プチ情報・うさぎ劇で記憶に残します。</p></div>
+  <div class="hero">
+    <div class="card">
+      <h2>まずは、流れを<br>つかむ。</h2>
+      <p>最初はトレーニングモードで、時系列と場所を確認。流れが見えたら、通常クイズでテンポよく定着させよう。</p>
       <div class="modeGrid">
-        <button class="modeBtn primary" onclick="startQuiz()"><strong>通常クイズを始める</strong><span>4択で高速反復。正解後に記憶フックが出ます。</span></button>
-        <button class="modeBtn" onclick="location.href='index2.html'"><strong>トレーニングモードへ</strong><span>時系列・場所・地図で、歴史の流れをつかむ。</span></button>
-        <button class="modeBtn" onclick="location.href='index3.html'"><strong>アドバンストレーニングへ</strong><span>比較・理由・因果関係を深めるモード。</span></button>
+        <button class="modeBtn train" onclick="location.href='index2.html'">トレーニングモードへ<small>時系列・場所・地図で「点」を「線」にする。</small></button>
+        <button class="modeBtn adv" onclick="location.href='index3.html'">アドバンストレーニングへ<small>比較・理由・因果関係を深める。</small></button>
+        <button class="modeBtn primary" onclick="showSelect()">通常クイズを始める<small>10問・15問・66問チャレンジを選んで反復。</small></button>
       </div>
     </div>
-    <div class="sideCard"><img src="images/rabbit16.png" onerror="this.src='images/rabbit01.png'" alt="うさぎ"><div class="speech">「まずは通常クイズで<br>記憶の土台を作ろう！」</div></div>
+    <div class="stage"><img src="images/rabbit16.png" alt="うさぎ"><div class="speech">「まずは流れ。<br>そのあと一気に覚える！」</div></div>
+  </div>
+  <div id="selectPanel" class="select" style="display:none">
+    <h2>通常クイズ</h2><p>出題数を選んでください。66問チャレンジは、全問正解で認定証が出ます。</p>
+    <div class="challengeBtns"><button class="challenge" onclick="startQuiz(10)">10問</button><button class="challenge" onclick="startQuiz(15)">15問</button><button class="challenge" onclick="startQuiz(66)">66問チャレンジ</button></div>
   </div>
 </section>
+
 <section id="quiz" class="screen">
-  <div class="quizLayout">
-    <div class="quizCard">
-      <div class="meta"><span id="count" class="pill"></span><span id="era" class="pill"></span><span id="place" class="pill"></span></div>
-      <div id="question" class="question"></div>
-      <div id="choices" class="choices"></div>
-      <div id="feedback" class="feedback"></div>
-      <div class="actions"><button id="nextBtn" class="bigBtn" onclick="nextQuestion()" style="display:none">次へ</button><button class="bigBtn secondary" onclick="backHome()">ホームへ</button></div>
-    </div>
-    <div class="rabbitPanel"><div class="rabbitSay" id="rabbitSay">「問題、いくよ！」</div><img id="rabbit" src="images/rabbit01.png" alt="うさぎ"><div class="rabbitSay" id="miniMemo">迷ったら、人物・場所・年号のセットで見る！</div></div>
+  <div class="quiz">
+    <main class="qcard">
+      <div class="status"><span class="pill" id="progress">1/10</span><span class="pill" id="score">0点</span><span class="pill" id="streak">連続 0</span></div>
+      <p class="question" id="question"></p><div class="choices" id="choices"></div>
+      <div class="controls"><button class="ctrl" id="nextBtn" onclick="nextQuestion()" style="display:none">次へ</button><button class="ctrl red" onclick="goHome()">タイトルへ</button></div>
+    </main>
+    <aside class="side"><div class="mini"><img id="rabbit" src="images/rabbit10.png" alt="うさぎ"><div class="speech" id="rabbitSpeech">いくぞ！</div></div><div class="feedback" id="feedback"><h3>記憶フック</h3><p>正解すると、語呂・プチ情報・うさぎ劇が出ます。</p></div></aside>
   </div>
 </section>
-<section id="final" class="screen"><div class="final"><img src="images/rabbit14.png" onerror="this.src='images/rabbit01.png'" alt="うさぎ"><h2>結果発表</h2><div class="score" id="scoreText"></div><p id="scoreMsg"></p><div class="actions" style="justify-content:center"><button class="bigBtn" onclick="startQuiz()">もう一度</button><button class="bigBtn secondary" onclick="backHome()">ホームへ</button><button class="bigBtn secondary" onclick="location.href='index2.html'">トレーニングへ</button></div></div></section>
-</main></div></div>
+
+<section id="result" class="screen">
+  <div class="result">
+    <h2>結果発表</h2><div class="scoreBig" id="finalScore">0/10</div><div class="rank" id="rank">ランク</div>
+    <div class="resultGrid"><div class="resultBox"><h3>フィードバック</h3><p id="feedbackText"></p></div><div class="resultBox"><h3>次のおすすめ</h3><p id="nextAdvice"></p></div></div>
+    <div class="certificate" id="certificate"><h3>幕末うさぎマスター認定証</h3><p>66問チャレンジを全問正解でクリアしました。</p><p>点の暗記から、線の理解へ。よくがんばりました。</p></div>
+    <div class="controls" style="justify-content:center"><button class="ctrl" onclick="showSelect()">もう一度</button><button class="ctrl" onclick="location.href='index2.html'">トレーニングへ</button><button class="ctrl" onclick="location.href='index3.html'">アドバンスへ</button><button class="ctrl red" onclick="goHome()">タイトルへ</button></div>
+  </div>
+</section>
+<div class="footer">Nara Bunka History Quiz</div>
+</div>
+
 <script>
-const QUESTIONS = [
- {era:'開国の衝撃',year:'1853',place:'浦賀',q:'1853年、アメリカ東インド艦隊司令長官として浦賀に来航した人物は？',a:'ペリー',c:['ハリス','プチャーチン','レザノフ'],goro:'「いやでござんす(1853)、黒船来航」',memo:'幕府が外国への対応を迫られる大きな転機。',scene:'黒船うさぎ「開国してくださーい！」江戸うさぎ「え、急に!?」',rabbit:'rabbit11.png'},
- {era:'開国の衝撃',year:'1854',place:'神奈川・下田・箱館',q:'1854年に結ばれ、下田・箱館を開港した条約は？',a:'日米和親条約',c:['日米修好通商条約','日英和親条約','日露和親条約'],goro:'「いやごよ(1854)、和親で港を開く」',memo:'貿易ではなく、補給・寄港を認めた段階。',scene:'幕府うさぎ「とりあえず港だけ…」',rabbit:'rabbit06.png'},
- {era:'開国の衝撃',year:'1854',place:'下田・箱館',q:'日米和親条約で開かれた2港の組み合わせは？',a:'下田・箱館',c:['横浜・長崎','神奈川・兵庫','新潟・長崎'],goro:'「しもだ・はこだて、まず2港」',memo:'下田は現在の静岡県、箱館は現在の北海道函館。',scene:'うさぎ案内人「まずは下田と箱館から！」',rabbit:'rabbit16.png'},
- {era:'通商条約と不平等',year:'1858',place:'江戸・神奈川',q:'1858年、アメリカ総領事ハリスとの間で結ばれた条約は？',a:'日米修好通商条約',c:['日米和親条約','日露和親条約','安政の五カ国条約'],goro:'「いやごや(1858)で通商スタート」',memo:'貿易開始。不平等条約として領事裁判権などが問題に。',scene:'ハリスうさぎ「貿易、始めましょう」幕府うさぎ「条件きつい…」',rabbit:'rabbit08.png'},
- {era:'通商条約と不平等',year:'1858',place:'下田・横浜など',q:'日米修好通商条約の内容として正しいものは？',a:'貿易開始と領事裁判権を認めた',c:['鎖国を完成させた','将軍が朝廷を廃止した','参勤交代を強化した'],goro:'「通商＝貿易、不平等もセット」',memo:'関税自主権が弱く、領事裁判権を認めた点が重要。',scene:'うさぎ商人「貿易だ！」幕府うさぎ「でも条件が不利…」',rabbit:'rabbit13.png'},
- {era:'幕府への反発',year:'1858-1859',place:'江戸・京都など',q:'井伊直弼が反対派を処罰した弾圧事件は？',a:'安政の大獄',c:['桜田門外の変','大政奉還','禁門の変'],goro:'「安政＝安心じゃない、大弾圧」',memo:'通商条約や将軍継嗣問題への反対派が処罰された。',scene:'井伊うさぎ「反対派は処分！」周り「ひぇ…」',rabbit:'rabbit10.png'},
- {era:'幕府への反発',year:'1860',place:'江戸城桜田門',q:'1860年、井伊直弼が水戸浪士らに暗殺された事件は？',a:'桜田門外の変',c:['安政の大獄','生麦事件','坂下門外の変'],goro:'「人群れ(1860)の中、桜田門で大事件」',memo:'安政の大獄への反発が爆発した事件。',scene:'雪の日、井伊うさぎ「え!?」水戸うさぎ「許さん！」',rabbit:'rabbit05.png'},
- {era:'公武合体と尊攘',year:'1862',place:'京都・江戸',q:'朝廷と幕府を結びつけて政治を安定させようとした政策は？',a:'公武合体',c:['尊王攘夷','大政奉還','版籍奉還'],goro:'「公＝朝廷、武＝幕府。くっつける」',memo:'和宮の降嫁などが代表例。',scene:'朝廷うさぎと幕府うさぎ「とりあえず手を組もう」',rabbit:'rabbit04.png'},
- {era:'尊王攘夷の高まり',year:'1862',place:'生麦（神奈川）',q:'イギリス人が薩摩藩士に殺傷され、薩英戦争の原因となった事件は？',a:'生麦事件',c:['桜田門外の変','禁門の変','蛤御門の変'],goro:'「生麦で、薩英戦争の火種」',memo:'外国人殺傷事件が国際問題化した。',scene:'生麦うさぎ「道中で大事件！」',rabbit:'rabbit12.png'},
- {era:'尊王攘夷の高まり',year:'1863',place:'鹿児島湾',q:'生麦事件をきっかけに起こった、薩摩藩とイギリスの戦争は？',a:'薩英戦争',c:['下関戦争','戊辰戦争','西南戦争'],goro:'「人群み(1863)て薩英戦争」',memo:'薩摩は西洋の軍事力を知り、考えを変えていく。',scene:'薩摩うさぎ「攘夷！」→「イギリス強すぎ…学ぼう」',rabbit:'rabbit07.png'},
- {era:'尊王攘夷の高まり',year:'1863-1864',place:'下関',q:'長州藩が外国船を砲撃したことをきっかけに起こった戦争は？',a:'下関戦争',c:['薩英戦争','鳥羽・伏見の戦い','箱館戦争'],goro:'「下関で外国船にドーン」',memo:'長州も西洋の力を痛感し、攘夷一本から変化していく。',scene:'長州うさぎ「撃てー！」外国船「反撃！」',rabbit:'rabbit15.png'},
- {era:'幕府改革',year:'1866',place:'全国',q:'江戸幕府が行った最後の大きな改革は？',a:'慶応の改革',c:['享保の改革','寛政の改革','天保の改革'],goro:'「最後の改革は慶応」',memo:'幕府は軍制改革などで立て直しを図った。',scene:'幕府うさぎ「まだ立て直せる…はず！」',rabbit:'rabbit03.png'}
-];
-let order=[],idx=0,score=0,answered=false;
-function shuffle(a){return [...a].sort(()=>Math.random()-0.5)}
-function show(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active')}
-function startQuiz(){order=shuffle(QUESTIONS.map((_,i)=>i));idx=0;score=0;show('quiz');loadQ()}
-function backHome(){show('home')}
-function loadQ(){answered=false;const d=QUESTIONS[order[idx]];document.getElementById('count').textContent=`${idx+1} / ${order.length}`;document.getElementById('era').textContent=d.era;document.getElementById('place').textContent=`場所：${d.place}`;document.getElementById('question').textContent=d.q;document.getElementById('rabbit').src='images/rabbit01.png';document.getElementById('rabbitSay').textContent='「選択肢をよく見て！」';document.getElementById('miniMemo').textContent=`${d.year}年ごろ｜${d.place}`;document.getElementById('feedback').className='feedback';document.getElementById('feedback').innerHTML='';document.getElementById('nextBtn').style.display='none';const choices=shuffle([d.a,...d.c]);const box=document.getElementById('choices');box.innerHTML='';choices.forEach(x=>{const b=document.createElement('button');b.className='choice';b.textContent=x;b.onclick=()=>answer(b,x,d);box.appendChild(b)})}
-function answer(btn,x,d){if(answered)return;answered=true;document.querySelectorAll('.choice').forEach(b=>{b.disabled=true;if(b.textContent===d.a)b.classList.add('correct')});const ok=x===d.a;if(!ok)btn.classList.add('wrong');if(ok)score++;document.getElementById('rabbit').src='images/'+(ok?d.rabbit:'rabbit09.png');document.getElementById('rabbitSay').textContent=ok?'「正解！記憶フックをつけよう！」':'「惜しい！ここで覚え直そう」';document.getElementById('miniMemo').textContent=d.scene;const f=document.getElementById('feedback');f.className='feedback show';f.innerHTML=`<div class="resultTitle" style="color:${ok?'#2e9d68':'#d94a4a'}">${ok?'正解！':'不正解'}</div><b>答え：${d.a}</b><br>🌟 ${d.goro}<br>🐰 ${d.scene}<br>📌 ${d.memo}`;document.getElementById('nextBtn').style.display='inline-block';document.getElementById('nextBtn').textContent=idx===order.length-1?'結果を見る':'次へ'}
-function nextQuestion(){idx++; if(idx>=order.length){finish()}else{loadQ()}}
-function finish(){show('final');document.getElementById('scoreText').textContent=`${score} / ${order.length}`;document.getElementById('scoreMsg').textContent=score===order.length?'完璧！次はトレーニングモードで流れを確認しよう。':'間違えた問題は、語呂とうさぎ劇で覚え直そう。'}
+const BASE=[
+["ペリーが浦賀へ来航し、開国を求めたのは西暦何年？","1853年",["1854年","1858年","1860年"],"1853＝いやこみ。黒船が来て幕府が『いや、困る！』。","浦賀に黒船。幕府うさぎが大あわて。","rabbit11.png"],
+["1853年に浦賀へ来航し、開国を求めたアメリカ東インド艦隊司令長官は？","ペリー",["ハリス","プチャーチン","ビッドル"],"ペリー＝黒船。1853年、浦賀に来て開国を求めた。","黒船ペリーうさぎ『開国してくださーい』。","rabbit16.png"],
+["ペリー来航時の老中首座は誰？","阿部正弘",["井伊直弼","徳川斉昭","堀田正睦"],"阿部正弘＝黒船対応で朝廷や諸大名に意見を求めた人物。","阿部うさぎ『ひとりでは決められない…』。","rabbit05.png"],
+["1854年にペリーが再来日し、江戸幕府と結んだ条約は？","日米和親条約",["日米修好通商条約","日露和親条約","安政の五カ国条約"],"和親＝まず仲良く。貿易ではなく、開港と補給が中心。","『まずは港を開いてね』の段階。","rabbit10.png"],
+["日米和親条約で開かれた港は？","下田・箱館",["横浜・長崎","新潟・兵庫","神奈川・大阪"],"和親条約＝下田・箱館。修好通商条約の港と混同注意。","まず開いたのは下田と箱館。","rabbit07.png"],
+["日米修好通商条約を、勅許を得ないまま調印した大老は？","井伊直弼",["堀田正睦","阿部正弘","徳川慶喜"],"井伊直弼＝無勅許調印＋安政の大獄。セットで覚える。","井伊うさぎ『決める！』周囲は大反発。","rabbit03.png"],
+["日米修好通商条約で幕府が開くと約束した場所は？","神奈川・長崎",["下田・箱館","浦賀・長崎","江戸・京都"],"修好通商条約の港は、和親条約の港と分けて覚える。","貿易の窓口が広がっていく。","rabbit06.png"],
+["幕末の貿易で輸出品の上位2品目は？","生糸・茶",["毛織物・綿織物","雑穀・蠟","金銀・銅"],"輸出＝生糸・茶。日本から出ていくもの。","生糸と茶が海外へ。","rabbit15.png"],
+["幕末の貿易で輸入品の上位2品目は？","毛織物・綿織物",["生糸・茶","米・雑穀","金銀・銅"],"輸入＝毛織物・綿織物。工業製品が入ってくる。","外国の布製品がどっと入る。","rabbit06.png"],
+["安政の大獄への反発として、1860年に井伊直弼が暗殺された事件は？","桜田門外の変",["坂下門外の変","生麦事件","東禅寺事件"],"安政の大獄→反発→桜田門外の変。因果で覚える。","雪の江戸城前。井伊うさぎに反発が集中。","rabbit09.png"],
+["桜田門外の変で暗殺された大老は？","井伊直弼",["阿部正弘","堀田正睦","徳川斉昭"],"桜田門外の変＝井伊直弼暗殺。","強硬政治への反発が爆発。","rabbit06.png"],
+["桜田門外の変後、朝廷と幕府の協力で政治安定を図ろうとした政策は？","公武合体",["尊王攘夷","大政奉還","王政復古"],"公＝朝廷、武＝幕府。合体＝協力。","朝廷うさぎと幕府うさぎが手を組む。","rabbit10.png"],
+["公武合体政策で、将軍家茂に降嫁した皇女は？","和宮",["篤姫","天璋院","静寛院"],"家茂と和宮の婚姻＝公武合体の象徴。","政略結婚で幕府を安定させたい。","rabbit15.png"],
+["1862年、安藤信正が水戸浪士らに襲撃された事件は？","坂下門外の変",["桜田門外の変","生麦事件","東禅寺事件"],"桜田門外＝井伊、坂下門外＝安藤信正。","門外シリーズは人物で区別。","rabbit12.png"],
+["生麦事件の賠償問題から1863年に起こった戦争は？","薩英戦争",["下関戦争","戊辰戦争","清仏戦争"],"生麦事件→薩英戦争。薩摩が西洋の強さを知る。","薩摩うさぎ『イギリス強すぎ…』。","rabbit11.png"],
+["長州藩が関門海峡で外国船を砲撃したことにより起こった戦争は？","下関戦争",["薩英戦争","戊辰戦争","生麦事件"],"下関＝長州。関門海峡で外国船砲撃。","長州うさぎ、攘夷を実行して反撃される。","rabbit09.png"],
+["薩摩や長州が攘夷から方針転換するきっかけになったのは何を知ったから？","西洋軍事力の強さ",["幕府の財政力","朝廷の命令","米価の安定"],"実際に戦って西洋の強さを知り、現実路線へ変化。","『勝てない…学ぶしかない』へ。","rabbit15.png"],
+["1866年、薩摩藩と長州藩が結んだ同盟は？","薩長同盟",["公武合体","四国艦隊","安政の五カ国条約"],"薩摩＋長州＝薩長同盟。倒幕へ大きく動く。","ライバル同士が手を組む大転換。","rabbit10.png"],
+["薩長同盟の仲介で有名な土佐藩出身の人物は？","坂本龍馬",["吉田松陰","高杉晋作","西郷隆盛"],"薩長同盟の仲介＝坂本龍馬。","龍馬うさぎ、両者をつなぐ。","rabbit13.png"],
+["江戸幕府が政権を朝廷に返上した出来事は？","大政奉還",["王政復古","版籍奉還","廃藩置県"],"大政奉還＝政権を朝廷へ返す。1867年。","幕府うさぎ『政権をお返しします』。","rabbit08.png"]
+].map(x=>({q:x[0],a:x[1],d:x[2],hook:x[3],mini:x[4],img:x[5]}));
+while(BASE.length<66){BASE.push({...BASE[BASE.length%20]});}
+let pool=[],idx=0,score=0,streak=0,total=10,answered=false,current=null,missed=[];
+const $=id=>document.getElementById(id);
+function shuffle(arr){const a=[...arr];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a}
+function screen(id){document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));$(id).classList.add("active");scrollTo({top:0,behavior:"smooth"})}
+function showSelect(){screen("home");$("selectPanel").style.display="block";setTimeout(()=>$("selectPanel").scrollIntoView({behavior:"smooth",block:"nearest"}),50)}
+function goHome(){$("selectPanel").style.display="none";screen("home")}
+function startQuiz(n){total=n;idx=0;score=0;streak=0;missed=[];pool=shuffle(BASE).slice(0,n);screen("quiz");render()}
+function render(){answered=false;current=pool[idx];$("progress").textContent=`${idx+1}/${total}`;$("score").textContent=`${score}点`;$("streak").textContent=`連続 ${streak}`;$("question").textContent=current.q;$("rabbit").src=`images/${current.img}`;$("rabbitSpeech").innerHTML="考えてみよう！";$("feedback").innerHTML="<h3>記憶フック</h3><p>選択肢を選ぶと、覚え方が出ます。</p>";$("nextBtn").style.display="none";$("choices").innerHTML="";shuffle([current.a,...current.d]).forEach(c=>{const b=document.createElement("button");b.className="choice";b.textContent=c;b.onclick=()=>answer(b,c);$("choices").appendChild(b)})}
+function answer(btn,val){if(answered)return;answered=true;const ok=val===current.a;document.querySelectorAll(".choice").forEach(b=>{b.disabled=true;if(b.textContent===current.a)b.classList.add("correct")});if(!ok){btn.classList.add("wrong");missed.push(current);streak=0;$("rabbit").src="images/rabbit09.png";$("rabbitSpeech").innerHTML="うーん、ここで覚え直し！"}else{score++;streak++;$("rabbit").src=streak>=3?"images/rabbit16.png":"images/rabbit14.png";$("rabbitSpeech").innerHTML=streak>=3?"連続正解！流れが見えてきた！":"正解！"}$("score").textContent=`${score}点`;$("streak").textContent=`連続 ${streak}`;$("feedback").innerHTML=`<h3>${ok?"正解！":"答えは「"+current.a+"」"}</h3><p><b>記憶フック：</b>${current.hook}</p><p><b>うさぎ劇：</b>${current.mini}</p>`;$("nextBtn").style.display="inline-block";$("nextBtn").textContent=idx===total-1?"結果を見る":"次へ"}
+function nextQuestion(){if(idx>=total-1)return result();idx++;render()}
+function result(){screen("result");$("finalScore").textContent=`${score}/${total}`;const rate=score/total;let rank,fb,ad;if(rate===1){rank="Sランク";fb="完璧。点の暗記はかなり固まっています。";ad="次はトレーニングで流れを確認し、アドバンスで理由まで押さえよう。"}else if(rate>=.85){rank="Aランク";fb="かなり良い。あと少しで全問正解。";ad="トレーニングで場所と時系列を確認すると安定します。"}else if(rate>=.65){rank="Bランク";fb="土台はできています。条約・人物・年号の混同を整理しよう。";ad="まずトレーニングに戻って、点を線につなげよう。"}else{rank="Cランク";fb="まだ伸びしろ大。単語だけでなく、出来事の順番から覚えよう。";ad="通常クイズより先に、トレーニングモードで基礎固めをしよう。"}$("rank").textContent=rank;$("feedbackText").textContent=fb;$("nextAdvice").textContent=ad;$("certificate").classList.toggle("show",total===66&&score===66)}
 </script>
 </body>
 </html>
